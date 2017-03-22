@@ -166,12 +166,6 @@ while iter < maxIter
     
     mu = min(max_mu,mu*rho);
     
-    Zs = Pt'*D;
-%     Zs = Zs*diag(sparse(1./sqrt(sum(Zs.^2))));
-    Zt = Pt'*Xtt;
-%     Zt = Zt*diag(sparse(1./sqrt(sum(Zt.^2))));
-    Cls = cvKnn(Zt, Zs, Yss, 1);
-    acc = length(find(Cls==Ytt))/length(Ytt);
-    fprintf('NN=%0.4f\n',acc);
+
     
 end
