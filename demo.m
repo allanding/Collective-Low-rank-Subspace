@@ -34,8 +34,7 @@ options.K = K;
 options.ReducedDim = 200;
 options.lambda3 = 1e1;
 options.optP = 2;
-options.inner = 100;
-Pt = CLRS(Xs,Ys,options);
+Pt = CLRS(Xs,Ys,Xtt,Ytt,options);
 
 %% Test Stage
 Zs = Pt'*Xss;

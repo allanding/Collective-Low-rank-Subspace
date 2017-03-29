@@ -1,4 +1,4 @@
-function Pt = CLRS(Xs,Ys,options)
+function Pt = CLRS(Xs,Ys,Xtt,Ytt,options)
 
 D = [];
 Yss = [];
@@ -53,7 +53,7 @@ end
 %% initialize parameters
 max_mu = 1e7;
 rho = 1.1;
-mu = 1e-6;
+mu = 1e-1;
 lambda3 = options.lambda3; %% for graph term
 lambda = 1e-3; %% for |Ei| & |Es|
 eta = 1e-3;
@@ -89,7 +89,7 @@ while iter < maxIter
             Pt = orth(Pt);
         elseif optP == 3 %% call solution to P with Gradient Descent Optimization
             addpath('./FOptM')
-            Pt = optimizingP(Pt,L,D,Xs,Zi,Pi,Es,Ei,Qi,Yi,K,d,mu,lambda3,options.inner);
+            Pt = optimizingP(Pt,L,D,Xs,Zi,Pi,Es,Ei,Qi,Yi,K,d,mu,lambda3,100);
         end
     end
     
@@ -165,6 +165,13 @@ while iter < maxIter
     end
     
     mu = min(max_mu,mu*rho);
-
+    
+    Zs = Pt'*D;
+%     Zs = Zs*diag(sparse(1./sqrt(sum(Zs.^2))));
+    Zt = Pt'*Xtt;
+%     Zt = Zt*diag(sparse(1./sqrt(sum(Zt.^2))));
+    Cls = cvKnn(Zt, Zs, Yss, 1);
+    acc = length(find(Cls==Ytt))/length(Ytt);
+    fprintf('NN=%0.4f\n',acc);
     
 end
