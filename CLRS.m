@@ -1,4 +1,5 @@
 function Pt = CLRS(Xs,Ys,Xtt,Ytt,options)
+
 D = [];
 Yss = [];
 K = options.K;
@@ -19,15 +20,13 @@ end
 Hb = ones(n)/n-Hw;
 
 [d,t] = size(D);
-
-%% initialize subspace P with random matrix
 p = options.ReducedDim;
 rand('seed',1)
 Pt = rand(d,p);
 
 
 
-%% initialize otehr variables
+
 Ji = cell(K,1);
 Zi = cell(K,1);
 Pi = cell(K,1);
@@ -55,26 +54,18 @@ end
 max_mu = 1e7;
 rho = 1.1;
 mu = 1e-6;
-lambda3 = options.lambda3; %% for supervised term
+lambda3 = options.lambda3; %% for graph term
 lambda = 1e-3; %% for |Ei| & |Es|
 eta = 1e-3;
 
-
-%% determine the iterations
+maxIter = 20;
+iter = 0;
 
 optP = options.optP;
 
-if optP ==3
-    maxIter = 3;
-else
-    maxIter = 10;
-end
-
-iter = 0;
-
-
 while iter < maxIter
     iter = iter + 1;
+    disp(iter)
     %% update Pt
     if(iter > 1)
         L = D*Zz*(Hw-Hb+eta*eye(n))*Zz'*D';
@@ -98,7 +89,7 @@ while iter < maxIter
             Pt = orth(Pt);
         elseif optP == 3 %% call solution to P with Gradient Descent Optimization
             addpath('./FOptM')
-            Pt = optimizingP(Pt,L,D,Xs,Zi,Pi,Es,Ei,Qi,Yi,K,d,mu,lambda3,90);
+            Pt = optimizingP(Pt,L,D,Xs,Zi,Pi,Es,Ei,Qi,Yi,K,d,mu,lambda3,options.inner);
         end
     end
     
@@ -156,7 +147,7 @@ while iter < maxIter
         len = len + si{k};
     end
     %% call solution to P with Low-rank constraint
-    if optP == 2
+    if optP == 2 
         %% update Qt
         tmpQ = Pt-R/mu;
         [Uq,sigma,Vq] = svd(tmpQ,'econ');
@@ -175,6 +166,5 @@ while iter < maxIter
     
     mu = min(max_mu,mu*rho);
 
-    
     
 end
