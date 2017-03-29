@@ -1,4 +1,4 @@
-function Pt = CLRS(Xs,Ys,Xtt,Ytt,options)
+function Pt = CLRS(Xs,Ys,options)
 
 D = [];
 Yss = [];
