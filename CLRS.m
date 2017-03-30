@@ -65,7 +65,7 @@ eta = 1e-3;
 optP = options.optP;
 
 if optP ==3
-    maxIter = 5;
+    maxIter = 3;
 else
     maxIter = 10;
 end
